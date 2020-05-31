@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
     private Text _restartTxt;
     [SerializeField]
     private Text _UIShield;
+    [SerializeField]
+    private Text _UIammo;
 
     private Player _player;
 
@@ -26,6 +28,8 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _UIShield.gameObject.SetActive(false);
+        _UIScore.text = "Score: " + 0;
+        _UIammo.text = "Ammo: " + 15;
         _player = GameObject.Find("Player").GetComponent<Player>();
         _gameOverTxt.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
@@ -57,6 +61,16 @@ public class UIManager : MonoBehaviour
         if (shieldStrength <= 0)
         {
             _UIShield.gameObject.SetActive(false);
+        }
+
+    }
+
+    public void UpdateAmmo(int ammoCount)
+    {
+        _UIammo.text = "Ammo : " + ammoCount;
+        if(ammoCount <= 0)
+        {
+            _UIammo.text = "NO AMMO";
         }
 
     }

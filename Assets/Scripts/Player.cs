@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private int _score;
+    private int _ammoCount = 15;
 
     //GameObj Shield & Thruster
     [SerializeField]
@@ -112,17 +113,22 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-        _canFire = Time.time + _fireRate;
-        if (_isTripleShotActive == true)
+        if(_ammoCount > 0)
         {
-            Instantiate(_tripleLaser, transform.position, Quaternion.identity);
-        }
-        else
-        {
-            Instantiate(_laserObj, transform.position, Quaternion.identity);
-        }
+            _canFire = Time.time + _fireRate;
+            if (_isTripleShotActive == true)
+            {
+                Instantiate(_tripleLaser, transform.position, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(_laserObj, transform.position, Quaternion.identity);
+                _ammoCount--;
+                _uiManager.UpdateAmmo(_ammoCount);
+            }
 
-        _audioSource.Play();
+            _audioSource.Play();
+        }
 
     }
 
