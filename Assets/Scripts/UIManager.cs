@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     private Text _gameOverTxt;
     [SerializeField]
     private Text _restartTxt;
+    [SerializeField]
+    private Text _UIShield;
 
     private Player _player;
 
@@ -23,7 +25,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _UIScore.text = "Score: " + 0;
+        _UIShield.gameObject.SetActive(false);
         _player = GameObject.Find("Player").GetComponent<Player>();
         _gameOverTxt.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
@@ -42,11 +44,23 @@ public class UIManager : MonoBehaviour
     public void UpdateLives(int livesCount)
     {
         currentLive.sprite = _imgLives[livesCount];
-        if(livesCount == 0)
+        if (livesCount == 0)
         {
             GameOverSequence();
         }
     }
+
+    public void UpdateShield(int shieldStrength)
+    {
+        _UIShield.text = "Shield : " + shieldStrength;
+        _UIShield.gameObject.SetActive(true);
+        if (shieldStrength <= 0)
+        {
+            _UIShield.gameObject.SetActive(false);
+        }
+
+    }
+        
 
     public void GameOverSequence()
     {

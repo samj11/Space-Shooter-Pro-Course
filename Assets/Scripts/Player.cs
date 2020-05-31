@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
 
     //UI & Game design
     private int _lives = 3;
+    private int _shieldStrength = 0;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private int _score;
@@ -129,10 +130,16 @@ public class Player : MonoBehaviour
     {
         if (_isShieldActive == true)
         {
-            _isShieldActive = false;
-            _shieldObj.SetActive(false);
+            _shieldStrength--;
+            _uiManager.UpdateShield(_shieldStrength);
+            if(_shieldStrength <= 0)
+            {
+                _isShieldActive = false;
+                _shieldObj.SetActive(false);
+            }
             return;
         }
+
         _lives--;
         _uiManager.UpdateLives(_lives);
 
@@ -182,6 +189,8 @@ public class Player : MonoBehaviour
 
     public void EnablePowerupShield()
     {
+        _shieldStrength = 3;
+        _uiManager.UpdateShield(_shieldStrength);
         _isShieldActive = true;
         _shieldObj.SetActive(true);
     }
