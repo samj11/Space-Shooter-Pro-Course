@@ -55,6 +55,9 @@ public class Powerup : MonoBehaviour
                     case 3:
                         player.EnablePowerupAmmo();
                         break;
+                    case 4:
+                        player.EnablePowerupHealth();
+                        break;
                     default:
                         break;
                 }

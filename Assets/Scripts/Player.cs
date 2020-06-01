@@ -147,24 +147,7 @@ public class Player : MonoBehaviour
         }
 
         _lives--;
-        _uiManager.UpdateLives(_lives);
-
-        if (_lives == 2)
-        {
-            _thrusterObj_Left.SetActive(true);
-        }
-        if (_lives == 1)
-        {
-            _thrusterObj_Right.SetActive(true);
-        }
-
-        if(_lives < 1)
-        {
-            _spawnManager.playerIsDead();
-            Destroy(this.gameObject);
-            Destroy(_thrusterObj_Left.gameObject);
-            Destroy(_thrusterObj_Right.gameObject);
-        }
+        DisplayPlayerHealth();
     }
 
     public void EnableTripleShot()
@@ -205,6 +188,39 @@ public class Player : MonoBehaviour
     {
         _ammoCount = 15;
         _uiManager.UpdateAmmo(_ammoCount);
+    }
+
+    public void EnablePowerupHealth()
+    {
+        _lives++;
+        DisplayPlayerHealth();
+    }
+
+    private void DisplayPlayerHealth()
+    {
+        _uiManager.UpdateLives(_lives);
+        if(_lives == 3)
+        {
+            _thrusterObj_Left.SetActive(false);
+            _thrusterObj_Right.SetActive(false);
+        }
+        if (_lives == 2)
+        {
+            _thrusterObj_Left.SetActive(true);
+            _thrusterObj_Right.SetActive(false);
+        }
+        if (_lives == 1)
+        {
+            _thrusterObj_Right.SetActive(true);
+        }
+
+        if (_lives < 1)
+        {
+            _spawnManager.playerIsDead();
+            Destroy(this.gameObject);
+            Destroy(_thrusterObj_Left.gameObject);
+            Destroy(_thrusterObj_Right.gameObject);
+        }
     }
 
     public void AddScore(int scorePoints)
