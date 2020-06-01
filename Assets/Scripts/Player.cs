@@ -201,6 +201,12 @@ public class Player : MonoBehaviour
         _shieldObj.SetActive(true);
     }
 
+    public void EnablePowerupAmmo()
+    {
+        _ammoCount = 15;
+        _uiManager.UpdateAmmo(_ammoCount);
+    }
+
     public void AddScore(int scorePoints)
     {
         _score += scorePoints;
