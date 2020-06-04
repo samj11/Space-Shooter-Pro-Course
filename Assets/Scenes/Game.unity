@@ -1308,7 +1308,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -55.1, y: -71}
+  m_AnchoredPosition: {x: -55.100098, y: -71}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1411705270
@@ -1637,7 +1637,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150.4, y: -113.4}
+  m_AnchoredPosition: {x: 150.3999, y: -113.3999}
   m_SizeDelta: {x: 160, y: 22.17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1820076841
@@ -1677,6 +1677,7 @@ MonoBehaviour:
   - {fileID: 2033964614240674482, guid: bc5ddce476ea1454bb899d2445e41f20, type: 3}
   - {fileID: 7606060263869238335, guid: 26f1f81718a034fdab76a7ee09cc8f54, type: 3}
   - {fileID: 7606060263869238335, guid: 8f9185c1c882b46808d5b05aed9a655e, type: 3}
+  - {fileID: 7606060263869238335, guid: 2178d944334e9427fa51cf0a2cd4ae44, type: 3}
   _enemyContainer: {fileID: 1433430674}
   _powerupContainer: {fileID: 1759277772}
 --- !u!4 &1820076843

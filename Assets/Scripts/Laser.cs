@@ -21,7 +21,6 @@ public class Laser : MonoBehaviour
         {
             MoveDown();
         }
-
     }
 
     private void MoveUp()
@@ -62,9 +61,6 @@ public class Laser : MonoBehaviour
         {
             Player player = other.GetComponent<Player>();
             player.Damage();
-        }
-
-            
+        }  
     }
-
 }

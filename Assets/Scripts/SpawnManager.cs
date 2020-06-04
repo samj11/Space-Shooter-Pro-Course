@@ -37,13 +37,20 @@ public class SpawnManager : MonoBehaviour
     {
         while(_playerIsDead == false)
         {
-            float randomSec = Random.Range(3, 7);
+            float randomSec = Random.Range(1, 2);
             Vector3 posSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            int randomPowerup = Random.Range(0, 4); 
-            GameObject newPowerup = Instantiate(powerups[randomPowerup], posSpawn, Quaternion.identity);
+            GameObject newPowerup = Instantiate(powerups[GetRandomNumberProbabibility()], posSpawn, Quaternion.identity);
             newPowerup.transform.parent = _powerupContainer.transform;
             yield return new WaitForSeconds(randomSec);
         }
+    }
+
+    private int GetRandomNumberProbabibility()
+    {
+        float probability = Random.value;
+        if (probability <= .9f)
+            return Random.Range(0, 5);
+        return 5;
     }
 
     public void playerIsDead()

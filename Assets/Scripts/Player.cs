@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     private GameObject _laserObj;
     [SerializeField]
     private GameObject _tripleLaser;
+    [SerializeField]
+    private GameObject _secFire;
     private float _fireRate = 0.3f;
     private float _canFire = -1f;
 
@@ -35,6 +37,7 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isSpeedActive = false;
     private bool _isShieldActive = false;
+    private bool _isSecFireActive = false;
 
     //Audio
     [SerializeField]
@@ -80,6 +83,7 @@ public class Player : MonoBehaviour
         {
             FireLaser();
         }
+            
     }
 
     void CalculateMovement()
@@ -120,16 +124,18 @@ public class Player : MonoBehaviour
             {
                 Instantiate(_tripleLaser, transform.position, Quaternion.identity);
             }
+            else if (_isSecFireActive == true)
+            {
+                Instantiate(_secFire, transform.position, Quaternion.identity);
+            }                
             else
             {
                 Instantiate(_laserObj, transform.position, Quaternion.identity);
                 _ammoCount--;
                 _uiManager.UpdateAmmo(_ammoCount);
             }
-
             _audioSource.Play();
         }
-
     }
 
     public void Damage()
@@ -145,7 +151,6 @@ public class Player : MonoBehaviour
             }
             return;
         }
-
         _lives--;
         DisplayPlayerHealth();
     }
@@ -171,7 +176,7 @@ public class Player : MonoBehaviour
 
     IEnumerator CountdownPowerupSpeed()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         _isSpeedActive = false;
         _speed /= _speedMultiplier;
     }
@@ -186,14 +191,32 @@ public class Player : MonoBehaviour
 
     public void EnablePowerupAmmo()
     {
-        _ammoCount = 15;
-        _uiManager.UpdateAmmo(_ammoCount);
+        if(_ammoCount < 15)
+        {
+            _ammoCount = 15;
+            _uiManager.UpdateAmmo(_ammoCount);
+        }
     }
 
     public void EnablePowerupHealth()
     {
-        _lives++;
-        DisplayPlayerHealth();
+        if(_lives < 3)
+        {
+            _lives++;
+            DisplayPlayerHealth();
+        }
+    }
+
+    public void EnablePowerupSecFire()
+    {
+        _isSecFireActive = true;
+        StartCoroutine(PowerupSecFireCountdown());
+    }
+
+    IEnumerator PowerupSecFireCountdown()
+    {
+        yield return new WaitForSeconds(5f);
+        _isSecFireActive = false;
     }
 
     private void DisplayPlayerHealth()
@@ -228,5 +251,4 @@ public class Player : MonoBehaviour
         _score += scorePoints;
         _uiManager.UpdateScore(_score);
     }
-
 }
