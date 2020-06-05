@@ -353,6 +353,7 @@ MonoBehaviour:
     type: 3}
   _tripleLaser: {fileID: 1425358543661639080, guid: de5d046d2b7b74ac5b5a2c562ba17af4,
     type: 3}
+  _secFire: {fileID: 236937533375904014, guid: f75152b36df244c638dc93ce9b3e487b, type: 3}
   _shieldObj: {fileID: 844703787}
   _thrusterObj_Left: {fileID: 1728628492}
   _thrusterObj_Right: {fileID: 1463296435}

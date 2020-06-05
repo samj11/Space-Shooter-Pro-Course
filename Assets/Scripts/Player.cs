@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 3.5f;
     private float _speedMultiplier = 2f;
+    [SerializeField]
+    private float _thrusterMultiplier = 1.75f;
 
     //Fire
     [SerializeField]
@@ -72,30 +74,48 @@ public class Player : MonoBehaviour
         {
             _audioSource.clip = _SoundLaser;
         }
-
     }
 
     // Update is called once per frame
     void Update()
     {
         CalculateMovement();
+        Boundaries();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
             FireLaser();
         }
-            
     }
+
+    //MOVEMENTS
 
     void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         float timeSpeed = _speed * Time.deltaTime;
-        float xPos = 11.3f;
-        float yPos = 7.0f;
 
         transform.Translate(new Vector3(horizontalInput, verticalInput) * timeSpeed);
 
+        Thrusters();
+    }
+
+    private void Thrusters()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _speed *= _thrusterMultiplier;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _speed /= _thrusterMultiplier;
+        }
+    }
+
+    private void Boundaries()
+    {
+        float xPos = 11.3f;
+        float yPos = 7.0f;
         if (transform.position.x >= xPos)
         {
             transform.position = new Vector3(-xPos, transform.position.y, 0);
@@ -114,6 +134,8 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(transform.position.x, yPos, 0);
         }
     }
+
+    //FIRE AND DAMAGE
 
     void FireLaser()
     {
@@ -154,6 +176,43 @@ public class Player : MonoBehaviour
         _lives--;
         DisplayPlayerHealth();
     }
+
+    private void DisplayPlayerHealth()
+    {
+        _uiManager.UpdateLives(_lives);
+        if (_lives == 3)
+        {
+            _thrusterObj_Left.SetActive(false);
+            _thrusterObj_Right.SetActive(false);
+        }
+        if (_lives == 2)
+        {
+            _thrusterObj_Left.SetActive(true);
+            _thrusterObj_Right.SetActive(false);
+        }
+        if (_lives == 1)
+        {
+            _thrusterObj_Right.SetActive(true);
+        }
+
+        if (_lives < 1)
+        {
+            _spawnManager.playerIsDead();
+            Destroy(this.gameObject);
+            Destroy(_thrusterObj_Left.gameObject);
+            Destroy(_thrusterObj_Right.gameObject);
+        }
+    }
+
+    //SCORE
+
+    public void AddScore(int scorePoints)
+    {
+        _score += scorePoints;
+        _uiManager.UpdateScore(_score);
+    }
+
+    //POWERUPS
 
     public void EnableTripleShot()
     {
@@ -217,38 +276,5 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         _isSecFireActive = false;
-    }
-
-    private void DisplayPlayerHealth()
-    {
-        _uiManager.UpdateLives(_lives);
-        if(_lives == 3)
-        {
-            _thrusterObj_Left.SetActive(false);
-            _thrusterObj_Right.SetActive(false);
-        }
-        if (_lives == 2)
-        {
-            _thrusterObj_Left.SetActive(true);
-            _thrusterObj_Right.SetActive(false);
-        }
-        if (_lives == 1)
-        {
-            _thrusterObj_Right.SetActive(true);
-        }
-
-        if (_lives < 1)
-        {
-            _spawnManager.playerIsDead();
-            Destroy(this.gameObject);
-            Destroy(_thrusterObj_Left.gameObject);
-            Destroy(_thrusterObj_Right.gameObject);
-        }
-    }
-
-    public void AddScore(int scorePoints)
-    {
-        _score += scorePoints;
-        _uiManager.UpdateScore(_score);
     }
 }
