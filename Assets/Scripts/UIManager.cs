@@ -15,8 +15,8 @@ public class UIManager : MonoBehaviour
     private Text _UIShield;
     [SerializeField]
     private Text _UIammo;
+    public Slider _UISlider;
 
-    private Player _player;
 
     [SerializeField]
     private Image currentLive;
@@ -30,14 +30,25 @@ public class UIManager : MonoBehaviour
         _UIShield.gameObject.SetActive(false);
         _UIScore.text = "Score: " + 0;
         _UIammo.text = "Ammo: " + 15;
-        _player = GameObject.Find("Player").GetComponent<Player>();
         _gameOverTxt.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+
+        _UISlider.value = 0;
 
         if (_gameManager == null)
         {
             Debug.Log("Game Manager NULL");
         }
+    }
+
+    public void UpdateThrusterSliderUp(float thrusterUp)
+    {
+        _UISlider.value += thrusterUp * Time.deltaTime;
+    }
+
+    public void UpdateThrusterSliderDown(float thrusterDown)
+    {
+        _UISlider.value -= thrusterDown * Time.deltaTime;
     }
 
     public void UpdateScore(int playerScore)
@@ -62,7 +73,6 @@ public class UIManager : MonoBehaviour
         {
             _UIShield.gameObject.SetActive(false);
         }
-
     }
 
     public void UpdateAmmo(int ammoCount)
@@ -72,9 +82,7 @@ public class UIManager : MonoBehaviour
         {
             _UIammo.text = "NO AMMO";
         }
-
     }
-        
 
     public void GameOverSequence()
     {
@@ -93,7 +101,5 @@ public class UIManager : MonoBehaviour
             _gameOverTxt.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.3f);
         }
-
     }
-
 }

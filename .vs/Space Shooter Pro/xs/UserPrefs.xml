@@ -1,17 +1,8 @@
 ﻿<Properties StartupConfiguration="{A27B0870-692B-5BA0-8D15-5AFDCA269F36}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/LaserSecFire.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Player.cs">
     <Files>
-      <File FileName="Assets/Scripts/SpawnManager.cs" Line="41" Column="73" IsPinned="True" />
-      <File FileName="Assets/Scripts/Enemy.cs" />
-      <File FileName="Assets/Scripts/Laser.cs" />
-      <File FileName="Assets/Scripts/Player.cs" />
-      <File FileName="Assets/Scripts/LaserSecFire.cs" Line="35" Column="10" />
-      <File FileName="Assets/Scripts/Powerup.cs" />
-      <File FileName="Assets/Scripts/UIManager.cs" />
-      <File FileName="Assets/Scripts/GameManager.cs" />
-      <File FileName="Assets/Scripts/Main_Menu/MainMenu.cs" />
-      <File FileName="Assets/Scripts/Asteroid.cs" />
-      <File FileName="Assets/Scripts/Explosion.cs" />
+      <File FileName="Assets/Scripts/Player.cs" Line="123" Column="1" />
+      <File FileName="Assets/Scripts/UIManager.cs" Line="52" Column="6" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -19,8 +10,7 @@
           <Node name="Space Shooter Pro" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="Main_Menu" expanded="True" />
-                <Node name="LaserSecFire.cs" selected="True" />
+                <Node name="Player.cs" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -30,7 +20,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="edf53cf3-7971-4ae3-a385-32241b640e3a" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="2da337a2-be28-41a2-9cf3-c083312c919d" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

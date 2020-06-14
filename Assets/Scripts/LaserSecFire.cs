@@ -60,5 +60,5 @@ public class LaserSecFire : MonoBehaviour
     }
 
     //Each laser should follow a different enemy.
-    //Right now, if the enemy has been destroyed, the laser that has been shot stays there.
+    //Right now, if the enemy has been destroyed, a new laser that has been shot stays there.
 }

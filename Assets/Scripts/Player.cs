@@ -8,8 +8,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 3.5f;
     private float _speedMultiplier = 2f;
+
+    //Thrusters
     [SerializeField]
     private float _thrusterMultiplier = 1.75f;
+    private bool _isThrusterActive = false;
+    private bool _isThrusterOverheat = false;
+    [SerializeField]
+    private float _sliderThrusterUp = 0.75f;
+    [SerializeField]
+    private float _sliderThrusterDown = 0.4f;
 
     //Fire
     [SerializeField]
@@ -80,6 +88,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+        Thrusters();
         Boundaries();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
@@ -88,7 +97,6 @@ public class Player : MonoBehaviour
     }
 
     //MOVEMENTS
-
     void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -96,20 +104,40 @@ public class Player : MonoBehaviour
         float timeSpeed = _speed * Time.deltaTime;
 
         transform.Translate(new Vector3(horizontalInput, verticalInput) * timeSpeed);
-
-        Thrusters();
     }
 
     private void Thrusters()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if(Input.GetKeyDown(KeyCode.LeftShift) && _isThrusterOverheat == false)
         {
             _speed *= _thrusterMultiplier;
+            _isThrusterActive = true;
         }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        else if (Input.GetKey(KeyCode.LeftShift) && _isThrusterOverheat == false)
+        {
+            _uiManager.UpdateThrusterSliderUp(_sliderThrusterUp);
+            if (_uiManager._UISlider.value == _uiManager._UISlider.maxValue)
+                _isThrusterOverheat = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift) && _isThrusterActive == true)
         {
             _speed /= _thrusterMultiplier;
+            _isThrusterActive = false;
         }
+
+        if(_isThrusterActive == true && _isThrusterOverheat == true)
+        {
+            _speed /= _thrusterMultiplier;
+            _isThrusterActive = false;
+        }            
+
+        if (_isThrusterActive == false)
+        {
+            _uiManager.UpdateThrusterSliderDown(_sliderThrusterDown);
+            if(_uiManager._UISlider.value == _uiManager._UISlider.minValue)
+                _isThrusterOverheat = false;
+        }
+
     }
 
     private void Boundaries()
