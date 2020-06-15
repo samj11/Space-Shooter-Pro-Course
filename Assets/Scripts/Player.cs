@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     private int _shieldStrength = 0;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
+    private CameraShake _cameraShake;
     private int _score;
     private int _ammoCount = 15;
 
@@ -62,15 +63,13 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
         
-        if (_spawnManager == null)
+        if (_spawnManager == null || _uiManager == null || _cameraShake == null)
         {
-            Debug.LogError("Spawn Manager not found");
+            Debug.LogError("Spawn Manager, UIManager or Camera not found");
         }
-        if(_uiManager == null)
-        {
-            Debug.Log("UIManager not found");
-        }
+       
 
         _audioSource = GetComponent<AudioSource>();
 
@@ -137,7 +136,6 @@ public class Player : MonoBehaviour
             if(_uiManager._UISlider.value == _uiManager._UISlider.minValue)
                 _isThrusterOverheat = false;
         }
-
     }
 
     private void Boundaries()
@@ -203,6 +201,8 @@ public class Player : MonoBehaviour
         }
         _lives--;
         DisplayPlayerHealth();
+        StartCoroutine(_cameraShake.Shake(0.3f, 0.1f));
+
     }
 
     private void DisplayPlayerHealth()
