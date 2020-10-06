@@ -49,7 +49,7 @@ public class SpawnManager : MonoBehaviour
     {
         float probability = Random.value;
         if (probability <= .9f)
-            return Random.Range(0, 5);
+            return Random.Range(0, powerups.Length);
         return 5;
     }
 

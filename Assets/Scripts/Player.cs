@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
     private bool _isSpeedActive = false;
     private bool _isShieldActive = false;
     private bool _isSecFireActive = false;
+    private bool _isNegativeActive = false;
 
     //Audio
     [SerializeField]
@@ -100,6 +101,8 @@ public class Player : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
+
+
         float timeSpeed = _speed * Time.deltaTime;
 
         transform.Translate(new Vector3(horizontalInput, verticalInput) * timeSpeed);
@@ -304,5 +307,20 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         _isSecFireActive = false;
+    }
+
+    public void EnablePowerupNegative()
+    {
+        _isNegativeActive = true;
+        _speed /= _speedMultiplier;
+        StartCoroutine(PowerupNegativeCountdown());
+
+    }
+
+    IEnumerator PowerupNegativeCountdown()
+    {
+        yield return new WaitForSeconds(3f);
+        _isNegativeActive = false;
+        _speed *= _speedMultiplier;
     }
 }
