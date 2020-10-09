@@ -44,7 +44,6 @@ public class SpawnManager : MonoBehaviour
                 _enemiesAlive = false;
 
             yield return new WaitForSeconds(1.0f);
-            Debug.Log("number of waves" + _waveCount);
         }
     }
 
