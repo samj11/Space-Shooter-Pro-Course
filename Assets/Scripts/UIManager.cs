@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     private Text _UIShield;
     [SerializeField]
     private Text _UIammo;
+    private int _maxAmmo = 15;
     public Slider _UISlider;
 
 
@@ -29,7 +30,7 @@ public class UIManager : MonoBehaviour
     {
         _UIShield.gameObject.SetActive(false);
         _UIScore.text = "Score: " + 0;
-        _UIammo.text = "Ammo: " + 15;
+        UpdateAmmo(15);
         _gameOverTxt.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
 
@@ -77,7 +78,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateAmmo(int ammoCount)
     {
-        _UIammo.text = "Ammo : " + ammoCount;
+        _UIammo.text = "Ammo : " + ammoCount + " / " + _maxAmmo;
         if(ammoCount <= 0)
         {
             _UIammo.text = "NO AMMO";
