@@ -10,11 +10,13 @@ public class Enemy : MonoBehaviour
     private Player _player;
     private Animator _animator;
     private AudioSource _audioSource;
+    private int _enemyTypeID = 1;
 
     //Fire
     private float _canFire = -2f;
     private float _fireRate = 2f;
 
+    //Lasers
     [SerializeField]
     private GameObject _laser;
 
@@ -39,24 +41,71 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("AudioSource on Enemy NULL");
         }
+
+        //Choose random enemy at start
+        _enemyTypeID = Random.Range(0, 2);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        CalculateMovement();
+        EnemyMovement();
         if (Time.time > _canFire)
         {
-            EnemyLaser();
+            EnemyWeapon();
         }
 
-
+        BorderLimits();
     }
 
-    void CalculateMovement()
+    //////////////////
+    //Enemy behaviours
+    //////////////////
+    void EnemyMovement()
     {
+        if(_enemyTypeID == 0)
         transform.Translate(new Vector3(Mathf.PingPong(Time.time, 1f),-1,0) * _speed * Time.deltaTime);
+        else if(_enemyTypeID == 1)
+        transform.Translate(new Vector3(Mathf.Sin(Time.time * 2f), -1, 0) * _speed * Time.deltaTime);
+    }
 
+    void EnemyWeapon()
+    {
+        _canFire = Time.time + _fireRate;
+        if (_enemyTypeID == 0)
+        {
+            GameObject _laserShot = Instantiate(_laser, transform.position, Quaternion.identity);
+            _laserShot.tag = "EnemyLaser";
+            Laser laser = _laserShot.GetComponent<Laser>();
+            laser.AssignEnemyFire();
+        }
+        else if(_enemyTypeID == 1)
+        {
+            _fireRate *= 1.2f;
+            GameObject _laserShot = Instantiate(_laser, transform.position, Quaternion.identity);
+            StartCoroutine(LaserScaleLerp(_laserShot, new Vector3(0, 0, 0), new Vector3(2, 7, 0), 5f));
+            _laserShot.tag = "EnemyLaser";
+            Laser laser = _laserShot.GetComponent<Laser>();
+            laser.AssignEnemyFire();
+        }    
+    }
+
+    IEnumerator LaserScaleLerp(GameObject obj, Vector3 minScale, Vector3 maxScale, float duration)
+    {
+        float i = 0f;
+        while(i < 1)
+        {
+            obj.transform.localScale = Vector3.Lerp(minScale, maxScale, i);
+            i += Time.deltaTime * duration;
+                yield return null;
+        }
+    }
+    
+
+        //DESTROY ENEMY methods
+        private void BorderLimits()
+    {
         if (transform.position.y < -5)
         {
             float randomTop = Random.Range(-9, 9);
@@ -64,9 +113,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-
         if(other.tag == "Weapon")
         {
             Destroy(other.gameObject);
@@ -76,7 +125,6 @@ public class Enemy : MonoBehaviour
             _audioSource.Play();
             Destroy(GetComponent<Collider2D>());
             Destroy(this.gameObject, 2.5f);
-
         }
 
         if(other.tag == "Player")
@@ -91,15 +139,5 @@ public class Enemy : MonoBehaviour
             _audioSource.Play();
             Destroy(this.gameObject, 2.5f);
         }
-    }
-
-
-    void EnemyLaser()
-    {
-        _canFire = Time.time + _fireRate;
-        GameObject _laserShot = Instantiate(_laser, transform.position, Quaternion.identity);
-        _laserShot.tag = "EnemyLaser";
-        Laser laser = _laserShot.GetComponent<Laser>();
-        laser.AssignEnemyFire();
     }
 }
