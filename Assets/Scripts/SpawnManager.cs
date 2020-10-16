@@ -11,6 +11,7 @@ public class SpawnManager : MonoBehaviour
     private GameObject[] powerups;
 
     private bool _enemiesAlive = false;
+    private int _powerupOnScreen = 0;
     private int _waveCount = 1;
 
     [SerializeField]
@@ -22,21 +23,19 @@ public class SpawnManager : MonoBehaviour
 
     public void StartSpawning()
     {
-        StartCoroutine(SpawnWaves());
-        StartCoroutine(SpawnPowerupRoutine());
+        StartCoroutine(SpawnEnemiesWaves());
+        StartCoroutine(SpawnPowerupWaves());
     }
 
-
-    IEnumerator SpawnWaves()
+    IEnumerator SpawnEnemiesWaves()
     {
         while (_playerIsDead == false)
         {
             if (_enemiesAlive == false)
             {
                 for (int i = 0; i < _waveCount; i++)
-                {
                     SpawnEnemy();
-                }
+
                 _waveCount++;
             }
 
@@ -52,27 +51,41 @@ public class SpawnManager : MonoBehaviour
         Vector3 posSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
         GameObject newEnemy = Instantiate(_enemyPrefab, posSpawn, Quaternion.identity);
         newEnemy.transform.parent = _enemyContainer.transform;
-        _enemiesAlive = true;   
+        _enemiesAlive = true;
     }
 
-    IEnumerator SpawnPowerupRoutine()
+    IEnumerator SpawnPowerupWaves()
     {
-        while(_playerIsDead == false)
+        while (_playerIsDead == false)
         {
-            float randomSec = Random.Range(1, 2);
-            Vector3 posSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            GameObject newPowerup = Instantiate(powerups[GetRandomNumberProbabibility()], posSpawn, Quaternion.identity);
-            newPowerup.transform.parent = _powerupContainer.transform;
+            _powerupOnScreen = _powerupContainer.transform.childCount;
+
+            if (_powerupOnScreen <= 1 && _enemiesAlive == true)
+            {
+                SpawnPowerup();
+                yield return new WaitForSeconds(1);
+            }
+
+            float randomSec = Random.Range(3, 6);
             yield return new WaitForSeconds(randomSec);
         }
     }
 
-    private int GetRandomNumberProbabibility()
+    private void SpawnPowerup()
+    {
+        Vector3 posSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
+        GameObject newPowerup = Instantiate(powerups[PowerupProbabibility()], posSpawn, Quaternion.identity);
+        newPowerup.transform.parent = _powerupContainer.transform;
+    }
+
+    private int PowerupProbabibility()
     {
         float probability = Random.value;
-        if (probability <= .9f)
-            return Random.Range(0, powerups.Length);
-        return 5;
+        if (probability <= .75f)
+            return Random.Range(0, 3);
+
+        int rarePowerup = Random.Range(4, 7);
+        return rarePowerup;
     }
 
     public void playerIsDead()
