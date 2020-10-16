@@ -8,9 +8,12 @@ public class Enemy : MonoBehaviour
     private float _speed = 4.0f;
 
     private Player _player;
+
     private Animator _animator;
     private AudioSource _audioSource;
     private int _enemyTypeID = 1;
+    [SerializeField]
+    private bool _shieldActive;
 
     //Fire
     private float _canFire = -2f;
@@ -42,8 +45,9 @@ public class Enemy : MonoBehaviour
             Debug.LogError("AudioSource on Enemy NULL");
         }
 
-        //Choose random enemy at start
+        //Choose random enemy and assign a shield
         _enemyTypeID = Random.Range(0, 2);
+        _shieldActive = (Random.value > 0.5f);
 
     }
 
@@ -103,8 +107,8 @@ public class Enemy : MonoBehaviour
     }
     
 
-        //DESTROY ENEMY methods
-        private void BorderLimits()
+    //DESTROY ENEMY methods
+    private void BorderLimits()
     {
         if (transform.position.y < -5)
         {
@@ -119,12 +123,17 @@ public class Enemy : MonoBehaviour
         if(other.tag == "Weapon")
         {
             Destroy(other.gameObject);
-            _animator.SetTrigger("OnEnemyDestroy");
-            _speed = 0;
-            _player.AddScore(10);
-            _audioSource.Play();
-            Destroy(GetComponent<Collider2D>());
-            Destroy(this.gameObject, 2.5f);
+            if (_shieldActive == false)
+            {
+                _animator.SetTrigger("OnEnemyDestroy");
+                _speed = 0;
+                _player.AddScore(10);
+                _audioSource.Play();
+                Destroy(GetComponent<Collider2D>());
+                Destroy(this.gameObject, 2.5f);
+            }
+            else
+                _shieldActive = false;
         }
 
         if(other.tag == "Player")
@@ -134,10 +143,16 @@ public class Enemy : MonoBehaviour
             {
                 player.Damage();
             }
-            _animator.SetTrigger("OnEnemyDestroy");
-            _speed = 0;
-            _audioSource.Play();
-            Destroy(this.gameObject, 2.5f);
+            if (_shieldActive == false)
+            {
+                _animator.SetTrigger("OnEnemyDestroy");
+                _speed = 0;
+                _audioSource.Play();
+                Destroy(this.gameObject, 2.5f);
+            }
+            else
+                _shieldActive = false;
+
         }
     }
 }
