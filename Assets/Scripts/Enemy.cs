@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     private float _speed = 4.0f;
 
     private Player _player;
+    private bool _playerIsNear;
 
     private Animator _animator;
     private AudioSource _audioSource;
@@ -68,10 +69,23 @@ public class Enemy : MonoBehaviour
     //////////////////
     void EnemyMovement()
     {
-        if(_enemyTypeID == 0)
-        transform.Translate(new Vector3(Mathf.PingPong(Time.time, 1f),-1,0) * _speed * Time.deltaTime);
-        else if(_enemyTypeID == 1)
-        transform.Translate(new Vector3(Mathf.Sin(Time.time * 2f), -1, 0) * _speed * Time.deltaTime);
+        float velocity = _speed * Time.deltaTime;
+        float distancePlayer = Vector3.Distance(_player.transform.position, transform.position);
+        if (distancePlayer < 4)
+        {
+            _playerIsNear = true;
+            transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, velocity *1.25f);
+        }
+        else
+            _playerIsNear = false;
+
+        if(_playerIsNear == false)
+        {
+            if (_enemyTypeID == 0)
+                transform.Translate(new Vector3(Mathf.PingPong(Time.time, 1f), -1, 0) * velocity);
+            else if (_enemyTypeID == 1)
+                transform.Translate(new Vector3(Mathf.Sin(Time.time * 2f), -1, 0) * velocity);
+        }
     }
 
     void EnemyWeapon()
