@@ -10,7 +10,7 @@
       <File FileName="Assets/Scripts/Asteroid.cs" />
       <File FileName="Assets/Scripts/Powerup.cs" />
       <File FileName="Assets/Scripts/LaserSecFire.cs" />
-      <File FileName="Assets/Scripts/Enemy.cs" Line="124" Column="39" />
+      <File FileName="Assets/Scripts/Enemy.cs" Line="61" Column="24" />
       <File FileName="Assets/Scripts/SpawnManager.cs" />
     </Files>
     <Pads>
@@ -30,7 +30,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="795db48b-8071-43e3-b074-3941999adc59" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="98ac5700-7aa4-4093-95c8-d35fab006ace" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

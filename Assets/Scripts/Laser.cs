@@ -63,6 +63,11 @@ public class Laser : MonoBehaviour
         {
             Player player = other.GetComponent<Player>();
             player.Damage();
-        }  
+        }
+
+        if(_isEnemyFire == true && other.tag == "Powerup")
+        {
+            Destroy(other.gameObject);
+        }
     }
 }

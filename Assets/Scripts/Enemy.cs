@@ -19,7 +19,8 @@ public class Enemy : MonoBehaviour
     //Fire
     private float _canFire = -2f;
     private float _fireRate = 2f;
-    private float _canFireBackward;
+    private float _canRapidFire;
+    private float _fireRateBack = 0.05f;
 
     //Lasers
     [SerializeField]
@@ -57,12 +58,17 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         BorderLimits();
+
         EnemyMovement();
         if (Time.time > _canFire)
             EnemyWeapon();
 
-        if(Time.time > _canFireBackward)
+        if(Time.time > _canRapidFire)
+        {
             WeaponBehind();
+            ShootPowerup();
+        }
+
     }
 
     //////////////////
@@ -112,16 +118,26 @@ public class Enemy : MonoBehaviour
         }    
     }
 
+    IEnumerator LaserScaleLerp(GameObject obj, Vector3 minScale, Vector3 maxScale, float duration)
+    {
+        float i = 0f;
+        while (i < 1)
+        {
+            obj.transform.localScale = Vector3.Lerp(minScale, maxScale, i);
+            i += Time.deltaTime * duration;
+            yield return null;
+        }
+    }
+
     void WeaponBehind()
     {
-        float _fireRateBack = 0.05f;
-        _canFireBackward = Time.time + _fireRateBack;
+        _canRapidFire = Time.time + _fireRateBack;
 
-        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up);
+        int layerMaskPlayer = 1 << 10;
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up, Mathf.Infinity, layerMaskPlayer);
 
         if(hitInfo.collider != null)
         {
-            Debug.Log("hit : " + hitInfo.transform.name);
             GameObject _laserShot = Instantiate(_laser, transform.position, Quaternion.identity);
             _laserShot.tag = "EnemyLaser";
             Laser laser = _laserShot.GetComponent<Laser>();
@@ -129,17 +145,24 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    IEnumerator LaserScaleLerp(GameObject obj, Vector3 minScale, Vector3 maxScale, float duration)
+
+    void ShootPowerup()
     {
-        float i = 0f;
-        while(i < 1)
+        _canRapidFire = Time.time + _fireRateBack;
+
+        int layerMaskPowerup = 1 << 9;
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity, layerMaskPowerup);
+
+        if(hitInfo.collider != null)
         {
-            obj.transform.localScale = Vector3.Lerp(minScale, maxScale, i);
-            i += Time.deltaTime * duration;
-                yield return null;
+            GameObject _laserShot = Instantiate(_laser, transform.position, Quaternion.identity);
+            _laserShot.tag = "EnemyLaser";
+            Laser laser = _laserShot.GetComponent<Laser>();
+            laser.AssignEnemyFire(false);
         }
+
     }
-    
+
 
     //DESTROY ENEMY methods
     private void BorderLimits()
