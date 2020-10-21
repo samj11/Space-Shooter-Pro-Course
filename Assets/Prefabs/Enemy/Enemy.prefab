@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1697918954938048463}
   - component: {fileID: 5499030473940653658}
   - component: {fileID: -3780865203871415675}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 4
+  _shieldActive: 0
   _laser: {fileID: 236937533375904014, guid: a245516833e65438385cbd56762b9067, type: 3}
 --- !u!212 &1339850226895850125
 SpriteRenderer:

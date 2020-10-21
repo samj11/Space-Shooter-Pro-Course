@@ -8,6 +8,7 @@ public class Laser : MonoBehaviour
     private float speed = 8.0f;
 
     private bool _isEnemyFire = false;
+    private bool _isEnemyFireUp = false;
 
 
     // Update is called once per frame
@@ -15,12 +16,12 @@ public class Laser : MonoBehaviour
     {
 
         if (_isEnemyFire == false)
-        {
             MoveUp();
-        } else
-        {
+        else if (_isEnemyFireUp == false)
             MoveDown();
-        }
+        else
+            MoveUp();
+
     }
 
     private void MoveUp()
@@ -50,9 +51,10 @@ public class Laser : MonoBehaviour
     }
 
 
-    public void AssignEnemyFire()
+    public void AssignEnemyFire(bool fireUp)
     {
         _isEnemyFire = true;
+        _isEnemyFireUp = fireUp;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

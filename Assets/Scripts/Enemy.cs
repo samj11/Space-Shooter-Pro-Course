@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     //Fire
     private float _canFire = -2f;
     private float _fireRate = 2f;
+    private float _canFireBackward;
 
     //Lasers
     [SerializeField]
@@ -55,13 +56,13 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        BorderLimits();
         EnemyMovement();
         if (Time.time > _canFire)
-        {
             EnemyWeapon();
-        }
 
-        BorderLimits();
+        if(Time.time > _canFireBackward)
+            WeaponBehind();
     }
 
     //////////////////
@@ -69,7 +70,9 @@ public class Enemy : MonoBehaviour
     //////////////////
     void EnemyMovement()
     {
+
         float velocity = _speed * Time.deltaTime;
+     //Come to player
         float distancePlayer = Vector3.Distance(_player.transform.position, transform.position);
         if (distancePlayer < 4)
         {
@@ -78,7 +81,7 @@ public class Enemy : MonoBehaviour
         }
         else
             _playerIsNear = false;
-
+    //Normal movement
         if(_playerIsNear == false)
         {
             if (_enemyTypeID == 0)
@@ -96,7 +99,7 @@ public class Enemy : MonoBehaviour
             GameObject _laserShot = Instantiate(_laser, transform.position, Quaternion.identity);
             _laserShot.tag = "EnemyLaser";
             Laser laser = _laserShot.GetComponent<Laser>();
-            laser.AssignEnemyFire();
+            laser.AssignEnemyFire(false);
         }
         else if(_enemyTypeID == 1)
         {
@@ -105,8 +108,25 @@ public class Enemy : MonoBehaviour
             StartCoroutine(LaserScaleLerp(_laserShot, new Vector3(0, 0, 0), new Vector3(2, 7, 0), 5f));
             _laserShot.tag = "EnemyLaser";
             Laser laser = _laserShot.GetComponent<Laser>();
-            laser.AssignEnemyFire();
+            laser.AssignEnemyFire(false);
         }    
+    }
+
+    void WeaponBehind()
+    {
+        float _fireRateBack = 0.05f;
+        _canFireBackward = Time.time + _fireRateBack;
+
+        RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, Vector2.up);
+
+        if(hitInfo.collider != null)
+        {
+            Debug.Log("hit : " + hitInfo.transform.name);
+            GameObject _laserShot = Instantiate(_laser, transform.position, Quaternion.identity);
+            _laserShot.tag = "EnemyLaser";
+            Laser laser = _laserShot.GetComponent<Laser>();
+            laser.AssignEnemyFire(true);
+        }
     }
 
     IEnumerator LaserScaleLerp(GameObject obj, Vector3 minScale, Vector3 maxScale, float duration)
@@ -166,7 +186,6 @@ public class Enemy : MonoBehaviour
             }
             else
                 _shieldActive = false;
-
         }
     }
 }
