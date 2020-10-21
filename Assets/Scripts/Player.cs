@@ -90,6 +90,7 @@ public class Player : MonoBehaviour
         CalculateMovement();
         Thrusters();
         Boundaries();
+        PowerupCollector();
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
             FireLaser();
@@ -244,6 +245,18 @@ public class Player : MonoBehaviour
     }
 
     //POWERUPS
+
+    void PowerupCollector()
+    {
+        if(Input.GetKey(KeyCode.C))
+        {
+            GameObject[] powerups = GameObject.FindGameObjectsWithTag("Powerup");
+            foreach(var powerup in powerups)
+            {
+                powerup.transform.position = Vector3.MoveTowards(powerup.transform.position, transform.position, 1f * _speed * Time.deltaTime);
+            }
+        }
+    }
 
     public void EnableTripleShot()
     {
