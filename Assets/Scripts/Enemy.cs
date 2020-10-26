@@ -9,9 +9,11 @@ public class Enemy : MonoBehaviour
 
     private Player _player;
     private bool _playerIsNear;
+    private bool _isPlayerLaserNear;
 
     private Animator _animator;
     private AudioSource _audioSource;
+
     private int _enemyTypeID = 1;
     [SerializeField]
     private bool _shieldActive;
@@ -32,21 +34,15 @@ public class Enemy : MonoBehaviour
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         if (_player == null)
-        {
             Debug.LogError("Player obj not found");
-        }
+
         _animator = gameObject.GetComponent<Animator>();
         if (_animator == null)
-        {
             Debug.LogError("Animator is null");
-        }
 
         _audioSource = GetComponent<AudioSource>();
-
         if(_audioSource == null)
-        {
             Debug.LogError("AudioSource on Enemy NULL");
-        }
 
         //Choose random enemy and assign a shield
         _enemyTypeID = Random.Range(0, 2);
@@ -76,8 +72,8 @@ public class Enemy : MonoBehaviour
     //////////////////
     void EnemyMovement()
     {
-
         float velocity = _speed * Time.deltaTime;
+
      //Come to player
         float distancePlayer = Vector3.Distance(_player.transform.position, transform.position);
         if (distancePlayer < 4)
@@ -91,11 +87,32 @@ public class Enemy : MonoBehaviour
         if(_playerIsNear == false)
         {
             if (_enemyTypeID == 0)
-                transform.Translate(new Vector3(Mathf.PingPong(Time.time, 1f), -1, 0) * velocity);
+            {
+                if (_isPlayerLaserNear)
+                    LaserDodging();
+                else
+                    transform.Translate(new Vector3(Mathf.PingPong(Time.time, 1f), -1, 0) * velocity);
+            }
+                
             else if (_enemyTypeID == 1)
-                transform.Translate(new Vector3(Mathf.Sin(Time.time * 2f), -1, 0) * velocity);
+            {
+                if (_isPlayerLaserNear)
+                    LaserDodging();
+                else
+                    transform.Translate(new Vector3(Mathf.Sin(Time.time * 2f), -1, 0) * velocity);
+            }
         }
     }
+
+    public void LaserNear(bool isPlayerLaserNear)
+    {
+        _isPlayerLaserNear = isPlayerLaserNear;
+    }
+
+    void LaserDodging()
+    {
+        transform.Translate(new Vector3(-1, -1, 0) * _speed * Time.deltaTime);
+    }    
 
     void EnemyWeapon()
     {
