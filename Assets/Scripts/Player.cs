@@ -25,11 +25,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleLaser;
     [SerializeField]
-    private GameObject _secFire;
+    private GameObject _homingFire;
     private float _fireRate = 0.3f;
     private float _canFire = -1f;
 
     //UI & Game design
+    [SerializeField]
     private int _lives = 3;
     private int _shieldStrength = 0;
     private SpawnManager _spawnManager;
@@ -48,7 +49,8 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isSpeedActive = false;
     private bool _isShieldActive = false;
-    private bool _isSecFireActive = false;
+    [SerializeField]
+    private bool _isHomingActive = false;
     private bool _isNegativeActive = false;
 
     //Audio
@@ -176,9 +178,9 @@ public class Player : MonoBehaviour
             {
                 Instantiate(_tripleLaser, transform.position, Quaternion.identity);
             }
-            else if (_isSecFireActive == true)
+            else if (_isHomingActive == true)
             {
-                Instantiate(_secFire, transform.position, Quaternion.identity);
+                Instantiate(_homingFire, transform.position, Quaternion.identity);
             }                
             else
             {
@@ -310,16 +312,16 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void EnablePowerupSecFire()
+    public void EnablePowerupHomingFire()
     {
-        _isSecFireActive = true;
-        StartCoroutine(PowerupSecFireCountdown());
+        _isHomingActive = true;
+        StartCoroutine(PowerupHomingFireCountdown());
     }
 
-    IEnumerator PowerupSecFireCountdown()
+    IEnumerator PowerupHomingFireCountdown()
     {
         yield return new WaitForSeconds(5f);
-        _isSecFireActive = false;
+        _isHomingActive = false;
     }
 
     public void EnablePowerupNegative()

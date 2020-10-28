@@ -7,6 +7,7 @@ TagManager:
   - Weapon
   - Enemy
   - EnemyLaser
+  - Powerup
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - 
   - Post Processing
   - Powerups
-  - 
-  - 
+  - Player
+  - Enemy
   - 
   - 
   - 

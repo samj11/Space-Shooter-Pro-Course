@@ -59,7 +59,7 @@ public class Powerup : MonoBehaviour
                         player.EnablePowerupHealth();
                         break;
                     case 5:
-                        player.EnablePowerupSecFire();
+                        player.EnablePowerupHomingFire();
                         break;
                     case 6:
                         player.EnablePowerupNegative();
