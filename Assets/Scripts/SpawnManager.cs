@@ -8,11 +8,15 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyPrefab;
     [SerializeField]
+    private GameObject _bossPrefab;
+    [SerializeField]
     private GameObject[] powerups;
 
     private bool _enemiesAlive = false;
     private int _powerupOnScreen = 0;
     private int _waveCount = 1;
+    [SerializeField]
+    private int _waveBoss = 3;
 
     [SerializeField]
     private GameObject _enemyContainer;
@@ -33,10 +37,15 @@ public class SpawnManager : MonoBehaviour
         {
             if (_enemiesAlive == false)
             {
-                for (int i = 0; i < _waveCount; i++)
-                    SpawnEnemy();
+                if (_waveCount < _waveBoss)
+                {
+                    for (int i = 0; i < _waveCount; i++)
+                        SpawnEnemy();
 
-                _waveCount++;
+                    _waveCount++;
+                }
+                else
+                    SpawnBoss();
             }
 
             if (_enemyContainer.transform.childCount == 0)
@@ -50,7 +59,18 @@ public class SpawnManager : MonoBehaviour
     {
         Vector3 posSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
         GameObject newEnemy = Instantiate(_enemyPrefab, posSpawn, Quaternion.identity);
+        Enemy enemyType = newEnemy.GetComponent<Enemy>();
+        enemyType.EnemyType(false);
         newEnemy.transform.parent = _enemyContainer.transform;
+        _enemiesAlive = true;
+    }
+
+    private void SpawnBoss()
+    {
+        GameObject newBoss = Instantiate(_bossPrefab, new Vector3(0, 7, 0), Quaternion.identity);
+        Enemy enemyType = newBoss.GetComponent<Enemy>();
+        enemyType.EnemyType(true);
+        newBoss.transform.parent = _enemyContainer.transform;
         _enemiesAlive = true;
     }
 

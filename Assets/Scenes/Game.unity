@@ -2161,6 +2161,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 2723820929074353809, guid: fa4a0f1c9b0b044349a2c85448eff052,
     type: 3}
+  _bossPrefab: {fileID: 2723820929074353809, guid: c4e805d275d6e41038032bea4be3569d,
+    type: 3}
   powerups:
   - {fileID: 327143457088299045, guid: 8460a09c5122241b5b49d7362e992cf8, type: 3}
   - {fileID: 3984951639662935518, guid: 018eac1dd6b8c491ab6d9b16255ef81a, type: 3}
@@ -2169,6 +2171,7 @@ MonoBehaviour:
   - {fileID: 7606060263869238335, guid: 8f9185c1c882b46808d5b05aed9a655e, type: 3}
   - {fileID: 7606060263869238335, guid: 2178d944334e9427fa51cf0a2cd4ae44, type: 3}
   - {fileID: 7606060263869238335, guid: 47f5f116bc30f4dbe9302e11d85cbc16, type: 3}
+  _waveBoss: 1
   _enemyContainer: {fileID: 1433430674}
   _powerupContainer: {fileID: 1759277772}
 --- !u!4 &1820076843

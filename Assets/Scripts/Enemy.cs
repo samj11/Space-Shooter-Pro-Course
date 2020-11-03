@@ -14,9 +14,21 @@ public class Enemy : MonoBehaviour
     private Animator _animator;
     private AudioSource _audioSource;
 
+    [SerializeField]
     private int _enemyTypeID = 1;
+    private bool _enemyIsBoss = false;
+
     [SerializeField]
     private bool _shieldActive;
+
+    //Boss
+    private bool bossInPos = false;
+    private float _bossPosition = 5f;
+    [SerializeField]
+    private float _bossLeftPos = -3f;
+    [SerializeField]
+    private float _bossRightPos = 3f;
+    private bool reachedLeftPos;
 
     //Fire
     private float _canFire = -2f;
@@ -43,28 +55,42 @@ public class Enemy : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         if(_audioSource == null)
             Debug.LogError("AudioSource on Enemy NULL");
-
-        //Choose random enemy and assign a shield
-        _enemyTypeID = Random.Range(0, 2);
-        _shieldActive = (Random.value > 0.5f);
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        BorderLimits();
-
-        EnemyMovement();
-        if (Time.time > _canFire)
-            EnemyWeapon();
-
-        if(Time.time > _canRapidFire)
+        if(_enemyIsBoss == false)
         {
-            WeaponBehind();
-            ShootPowerup();
-        }
+            BorderLimits();
+            EnemyMovement();
+            if (Time.time > _canFire)
+                EnemyWeapon();
 
+            if (Time.time > _canRapidFire)
+            {
+                WeaponBehind();
+                ShootPowerup();
+            }
+        }
+        else
+        {
+            BossMovement();
+            if(bossInPos && Time.time > _canFire)
+                BossWeapon();
+        }
+    }
+
+    public void EnemyType(bool isBoss)
+    {
+        _enemyIsBoss = isBoss;
+        if (_enemyIsBoss == false)
+        {
+            _enemyTypeID = Random.Range(0, 2);
+            _shieldActive = (Random.value > 0.5f);
+        }
+        else
+            _shieldActive = true;
     }
 
     //////////////////
@@ -101,6 +127,48 @@ public class Enemy : MonoBehaviour
                 else
                     transform.Translate(new Vector3(Mathf.Sin(Time.time * 2f), -1, 0) * velocity);
             }
+        }
+    }
+
+    void BossMovement()
+    {
+        float step = _speed * Time.deltaTime;
+
+        if (transform.position.y > _bossPosition)
+            transform.Translate(new Vector3(0, -1, 0) * step);
+        else
+            bossInPos = true;
+
+        if(bossInPos == true)
+        {
+            if (transform.position.x == _bossLeftPos)
+                reachedLeftPos = true;
+            else if (transform.position.x == _bossRightPos)
+                reachedLeftPos = false;
+
+            if (reachedLeftPos == false)
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(_bossLeftPos, _bossPosition, 0), step);
+
+            else if(reachedLeftPos == true)
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(_bossRightPos, _bossPosition, 0), step);
+        }
+    }
+
+    void BossWeapon()
+    {
+
+        _canFire = Time.time + _fireRate;
+
+        int laserAngle = -75;
+
+        for(int i = 0; i < 12; i++)
+        {
+            GameObject _laserShot = Instantiate(_laser, transform.position, Quaternion.Euler(0, 0, laserAngle));
+            _laserShot.tag = "EnemyLaser";
+            Laser laser = _laserShot.GetComponent<Laser>();
+            laser.AssignEnemyFire(false);
+
+            laserAngle = laserAngle + 15;
         }
     }
 
@@ -191,7 +259,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Weapon")
@@ -228,4 +295,5 @@ public class Enemy : MonoBehaviour
                 _shieldActive = false;
         }
     }
+
 }
